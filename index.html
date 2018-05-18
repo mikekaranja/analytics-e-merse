@@ -1,0 +1,54 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width,initial-scale=1.0">
+  <!-- Include the CSS that styles the charts. -->
+  <link rel="stylesheet" href="static/chartjs-visualizations.css">
+  <meta name="google-signin-client_id" content="662994060989-alo8n62l7629hc6n6d095uvq8c69e1h8.apps.googleusercontent.com">
+  <meta name="google-signin-scope" content="https://www.googleapis.com/auth/analytics.readonly">
+  <title>admin</title>
+  <link href='https://fonts.googleapis.com/css?family=Roboto:300,400,500,700|Material+Icons' rel="stylesheet">
+</head>
+
+<body>
+  <div id="app"></div>
+  <!-- built files will be auto injected -->
+  <!-- Load the JavaScript API client and Sign-in library. -->
+  <script src="https://apis.google.com/js/client:platform.js"></script>
+  <script>
+    (function (w, d, s, g, js, fs) {
+      g = w.gapi || (w.gapi = {});
+      g.analytics = {
+        q: [],
+        ready: function (f) {
+          this.q.push(f);
+        }
+      };
+      js = d.createElement(s);
+      fs = d.getElementsByTagName(s)[0];
+      js.src = 'https://apis.google.com/js/platform.js';
+      fs.parentNode.insertBefore(js, fs);
+      js.onload = function () {
+        g.load('analytics');
+      };
+    }(window, document, 'script'));
+
+  </script>
+  <!-- This demo uses the Chart.js graphing library and Moment.js to do date
+     formatting and manipulation. -->
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/1.0.2/Chart.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/moment.js/2.10.2/moment.min.js"></script>
+
+  <!-- Include the ViewSelector2 component script. -->
+  <script src="http://besure.co.ke/assets/dashboard/google-analytics/view-selector2.js"></script>
+
+  <!-- Include the DateRangeSelector component script. -->
+  <script src="http://besure.co.ke/assets/dashboard/google-analytics/date-range-selector.js"></script>
+
+  <!-- Include the ActiveUsers component script. -->
+  <script src="http://besure.co.ke/assets/dashboard/google-analytics/active-users.js"></script>
+</body>
+
+</html>
