@@ -17,7 +17,7 @@
         <v-flex xs4>
           <v-card :style="{ visibility: enter, opacity: op }" class="card-leads-1" dark color="primary">
             <v-card-title primary-title>
-              <div style="width: 100%;font-size: 48px;">38</div>
+              <div style="width: 100%;font-size: 48px;">{{ total }}</div>
               <div style="width: 100%;margin-bottom: 54px;">Today's number of leads.</div>
             </v-card-title>
           </v-card>
@@ -25,9 +25,9 @@
         <v-flex xs4>
           <v-card :style="{ visibility: enter, opacity: op }" class="card-leads-2" dark color="primary">
             <v-card-title primary-title>
-              <div style="width: 100%;font-size: 48px;">12 %</div>
+              <div style="width: 100%;font-size: 48px;">{{ conversionRate }} %</div>
               <div style="width: 100%;margin-bottom: 10px;">Today's lead conversion rate.</div>
-              <div style="width: 100%;margin-bottom: 23px;">Number of users to website 234.</div>
+              <div style="width: 100%;margin-bottom: 23px;">Today's number of users {{ users }}.</div>
             </v-card-title>
           </v-card>
         </v-flex>
@@ -49,32 +49,75 @@
         <div class="second-header">
           <div id="view-selector-container"></div>
         </div>
-        <div class="Chartjs">
-          <h3>This Week vs Last Week (by sessions)</h3>
-          <figure class="Chartjs-figure" id="chart-1-container"></figure>
-          <ol class="Chartjs-legend" id="legend-1-container"></ol>
-        </div>
-        <div class="Chartjs">
-          <h3>This Year vs Last Year (by users)</h3>
-          <figure class="Chartjs-figure" id="chart-2-container"></figure>
-          <ol class="Chartjs-legend" id="legend-2-container"></ol>
-        </div>
-        <div class="Chartjs">
-          <h3>Top Browsers (by pageview)</h3>
-          <figure class="Chartjs-figure" id="chart-3-container"></figure>
-          <ol class="Chartjs-legend" id="legend-3-container"></ol>
-        </div>
-        <div class="Chartjs">
-          <h3>Top Countries (by sessions)</h3>
-          <figure class="Chartjs-figure" id="chart-4-container"></figure>
-          <ol class="Chartjs-legend" id="legend-4-container"></ol>
-        </div>
+        <v-flex xs6>
+          <v-card style="margin: 15px;" light>
+            <div class="Chartjs">
+              <h3>Users (past week)</h3>
+              <figure class="Chartjs-figure" id="chart-1-container"></figure>
+              <ol class="Chartjs-legend" id="legend-1-container"></ol>
+            </div>
+          </v-card>
+        </v-flex>
+        <v-flex xs6>
+          <v-card style="margin: 15px;" light>
+            <div class="Chartjs">
+              <h3>Bounce Rate (by session)</h3>
+              <figure class="Chartjs-figure" id="chart-2-container"></figure>
+              <ol class="Chartjs-legend" id="legend-2-container"></ol>
+            </div>
+          </v-card>
+        </v-flex>
+        <v-flex xs6>
+          <v-card style="margin: 15px;" light>
+            <div class="Chartjs">
+              <h3>Average Duration (by session)</h3>
+              <figure class="Chartjs-figure" id="chart-3-container"></figure>
+              <ol class="Chartjs-legend" id="legend-3-container"></ol>
+            </div>
+          </v-card>
+        </v-flex>
+        <v-flex xs6>
+          <v-card style="margin: 15px;" light>
+            <div class="Chartjs">
+              <h3>Top Traffic Sources (past week)</h3>
+              <figure class="Chartjs-figure" id="chart-4-container"></figure>
+              <ol class="Chartjs-legend" id="legend-4-container"></ol>
+            </div>
+          </v-card>
+        </v-flex>
+        <v-flex xs6>
+          <v-card style="margin: 15px;" light>
+            <div class="Chartjs">
+              <h3>Top Mobile Devices (by session)</h3>
+              <figure class="Chartjs-figure" id="chart-5-container"></figure>
+              <ol class="Chartjs-legend" id="legend-5-container"></ol>
+            </div>
+          </v-card>
+        </v-flex>
+        <v-flex xs6>
+          <v-card style="margin: 15px;" light>
+            <div class="Chartjs">
+              <h3>Top Browsers (by pageview)</h3>
+              <figure class="Chartjs-figure" id="chart-6-container"></figure>
+              <ol class="Chartjs-legend" id="legend-6-container"></ol>
+            </div>
+          </v-card>
+        </v-flex>
       </v-layout>
     </v-slide-y-transition>
   </v-container>
 </template>
 
 <script>
+const config = {
+  apiKey: 'AIzaSyC76Juw8rMxbeVDbIm_ABL-IIhssVDDDn8',
+  authDomain: 'e-merse.firebaseapp.com',
+  databaseURL: 'https://e-merse.firebaseio.com',
+  projectId: 'e-merse',
+  storageBucket: 'e-merse.appspot.com',
+  messagingSenderId: '662994060989'
+}
+
 const CLIENT_ID =
   '662994060989-alo8n62l7629hc6n6d095uvq8c69e1h8.apps.googleusercontent.com'
 
@@ -84,27 +127,93 @@ export default {
       e1: '',
       enter: 'hidden',
       op: 0,
+      leads: [],
+      total: '',
+      users: '',
       items: [
-        { text: 'Backyardshoez', db: 'backyardshoez' },
-        { text: 'Backyardmens', db: 'backyardmens' },
-        { text: 'Citywalk', db: 'citywalk' },
-        { text: 'My Curves', db: 'Wendy Waweru' },
-        { text: 'Salute Holdings', db: 'salute' }
+        { text: 'Backyardshoez', db: 'backyardshoez', id: '157142203' },
+        { text: 'Backyardmens', db: 'backyardmens', id: '174121249' },
+        { text: 'Citywalk', db: 'citywalk', id: '156430690' },
+        { text: 'My Curves', db: 'Wendy Waweru', id: '168279389' },
+        { text: 'Salute Holdings', db: 'salute', id: '166305779' }
       ]
     }
   },
+  computed: {
+    conversionRate () {
+      let div = parseInt(this.total) / parseInt(this.users)
+      let con = div * 100
+      console.log(con)
+      return con
+    }
+  },
   methods: {
+    dateOf (time) {
+      let today = new Date(time)
+      let day =
+        today.getDate() + ' ' + today.getFullYear() + ' ' + today.getMonth()
+      return day
+    },
     getLeads () {
+      this.total = ''
       this.enter = 'hidden'
       this.op = 0
       setTimeout(() => {
         this.enter = 'visible'
         this.op = 1
-      }, 1000)
-      console.log(this.e1.text)
+      }, 2500)
+      this.queryReports(this.e1.id)
+      window.firebase
+        .database()
+        .ref(`vendorsleads/${this.e1.db}`)
+        .once('value')
+        .then(snapshot => {
+          this.leads = snapshot.val()
+        })
+        .then(() => {
+          let today = new Date()
+          let day =
+            today.getDate() + ' ' + today.getFullYear() + ' ' + today.getMonth()
+          const leads = Object.values(this.leads).filter(
+            item => this.dateOf(item.startedAt) === day
+          )
+          this.total = leads.length
+        })
+    },
+    // Query the API and print the results to the page.
+    queryReports (id) {
+      window.gapi.client
+        .request({
+          path: '/v4/reports:batchGet',
+          root: 'https://analyticsreporting.googleapis.com/',
+          method: 'POST',
+          body: {
+            reportRequests: [
+              {
+                viewId: id,
+                dateRanges: [
+                  {
+                    startDate: 'today',
+                    endDate: 'today'
+                  }
+                ],
+                metrics: [
+                  {
+                    expression: 'ga:users'
+                  }
+                ]
+              }
+            ]
+          }
+        })
+        .then(this.displayResults, console.error.bind(console))
+    },
+    displayResults (response) {
+      this.users = response.result.reports[0].data.totals[0].values[0]
     }
   },
   mounted () {
+    window.firebase.initializeApp(config)
     window.gapi.analytics.ready(function () {
       /**
        * Authorize the user immediately if the user has already granted access.
@@ -169,59 +278,27 @@ export default {
         activeUsers.set(data).execute()
 
         // Render all the of charts for this view.
-        renderWeekOverWeekChart(data.ids)
-        renderYearOverYearChart(data.ids)
+        renderUsersChart(data.ids)
+        renderTopBounceRateChart(data.ids)
+        renderTopAvDurationChart(data.ids)
+        renderTopTrafficSourceChart(data.ids)
+        renderTopDeviceChart(data.ids)
         renderTopBrowsersChart(data.ids)
-        renderTopCountriesChart(data.ids)
       })
 
-      /**
-       * Draw the a chart.js line chart with data from the specified view that
-       * overlays session data for the current week over session data for the
-       * previous week.
-       */
-      function renderWeekOverWeekChart (ids) {
-        // Adjust `now` to experiment with different days, for testing only...
-        let now = window.moment() // .subtract(3, 'day');
-
-        let thisWeek = query({
+      // users last 7 days
+      function renderUsersChart (ids) {
+        query({
           ids: ids,
-          dimensions: 'ga:date,ga:nthDay',
-          metrics: 'ga:sessions',
-          'start-date': window
-            .moment(now)
-            .subtract(1, 'day')
-            .day(0)
-            .format('YYYY-MM-DD'),
-          'end-date': window.moment(now).format('YYYY-MM-DD')
-        })
-
-        let lastWeek = query({
-          ids: ids,
-          dimensions: 'ga:date,ga:nthDay',
-          metrics: 'ga:sessions',
-          'start-date': window
-            .moment(now)
-            .subtract(1, 'day')
-            .day(0)
-            .subtract(1, 'week')
-            .format('YYYY-MM-DD'),
-          'end-date': window
-            .moment(now)
-            .subtract(1, 'day')
-            .day(6)
-            .subtract(1, 'week')
-            .format('YYYY-MM-DD')
-        })
-
-        Promise.all([thisWeek, lastWeek]).then(function (results) {
-          let data1 = results[0].rows.map(function (row) {
-            return +row[2]
+          dimensions: 'ga:date',
+          metrics: 'ga:7dayUsers',
+          'start-date': '7daysAgo',
+          'end-date': 'today'
+        }).then(function (response) {
+          let data1 = response.rows.map(function (row) {
+            return +row[1]
           })
-          let data2 = results[1].rows.map(function (row) {
-            return +row[2]
-          })
-          let labels = results[1].rows.map(function (row) {
+          let labels = response.rows.map(function (row) {
             return +row[0]
           })
 
@@ -233,122 +310,159 @@ export default {
             labels: labels,
             datasets: [
               {
-                label: 'Last Week',
+                label: 'Past Week',
                 fillColor: 'rgba(220,220,220,0.5)',
                 strokeColor: 'rgba(220,220,220,1)',
                 pointColor: 'rgba(220,220,220,1)',
                 pointStrokeColor: '#fff',
-                data: data2
-              },
+                data: data1
+              }
+            ]
+          }
+          new window.Chart(makeCanvas('chart-1-container')).Line(data)
+          generateLegend('legend-1-container', data)
+        })
+      }
+
+      // Bounce Rate last 7 days
+      function renderTopBounceRateChart (ids) {
+        query({
+          ids: ids,
+          dimensions: 'ga:date',
+          metrics: 'ga:bounceRate',
+          'start-date': '7daysAgo',
+          'end-date': 'today'
+        }).then(function (response) {
+          let data1 = response.rows.map(function (row) {
+            return +row[1]
+          })
+          let labels = response.rows.map(function (row) {
+            return +row[0]
+          })
+
+          labels = labels.map(function (label) {
+            return window.moment(label, 'YYYYMMDD').format('ddd')
+          })
+
+          let data = {
+            labels: labels,
+            datasets: [
               {
-                label: 'This Week',
-                fillColor: 'rgba(151,187,205,0.5)',
-                strokeColor: 'rgba(151,187,205,1)',
-                pointColor: 'rgba(151,187,205,1)',
+                label: 'Past Week',
+                backgroundColor: [
+                  '#3e95cd',
+                  '#8e5ea2',
+                  '#3cba9f',
+                  '#e8c3b9',
+                  '#c45850',
+                  '#e8c3b9',
+                  '#c45850'
+                ],
+                data: data1
+              }
+            ]
+          }
+
+          new window.Chart(makeCanvas('chart-2-container')).Bar(data)
+          generateLegend('legend-2-container', data)
+        })
+      }
+
+      // Average Duration Rate
+      function renderTopAvDurationChart (ids) {
+        query({
+          ids: ids,
+          dimensions: 'ga:date',
+          metrics: 'ga:avgSessionDuration',
+          'start-date': '7daysAgo',
+          'end-date': 'today'
+        }).then(function (response) {
+          let data1 = response.rows.map(function (row) {
+            return +row[1]
+          })
+          let labels = response.rows.map(function (row) {
+            return +row[0]
+          })
+
+          labels = labels.map(function (label) {
+            return window.moment(label, 'YYYYMMDD').format('ddd')
+          })
+
+          let data = {
+            labels: labels,
+            datasets: [
+              {
+                label: 'Past Week',
+                fillColor: 'rgba(220,220,220,0.5)',
+                strokeColor: 'rgba(220,220,220,1)',
+                pointColor: 'rgba(220,220,220,1)',
                 pointStrokeColor: '#fff',
                 data: data1
               }
             ]
           }
 
-          new window.Chart(makeCanvas('chart-1-container')).Line(data)
-          generateLegend('legend-1-container', data.datasets)
+          new window.Chart(makeCanvas('chart-3-container')).Line(data)
+          generateLegend('legend-3-container', data)
         })
       }
 
-      /**
-       * Draw the a chart.js bar chart with data from the specified view that
-       * overlays session data for the current year over session data for the
-       * previous year, grouped by month.
-       */
-      function renderYearOverYearChart (ids) {
-        // Adjust `now` to experiment with different days, for testing only...
-        let now = window.moment() // .subtract(3, 'day');
-
-        let thisYear = query({
+      // Top Traffic source chart
+      function renderTopTrafficSourceChart (ids) {
+        query({
           ids: ids,
-          dimensions: 'ga:month,ga:nthMonth',
-          metrics: 'ga:users',
-          'start-date': window
-            .moment(now)
-            .date(1)
-            .month(0)
-            .format('YYYY-MM-DD'),
-          'end-date': window.moment(now).format('YYYY-MM-DD')
+          dimensions: 'ga:source',
+          metrics: 'ga:sessions',
+          sort: '-ga:sessions',
+          'max-results': 6,
+          'start-date': '30daysAgo',
+          'end-date': 'today'
         })
-
-        let lastYear = query({
-          ids: ids,
-          dimensions: 'ga:month,ga:nthMonth',
-          metrics: 'ga:users',
-          'start-date': window
-            .moment(now)
-            .subtract(1, 'year')
-            .date(1)
-            .month(0)
-            .format('YYYY-MM-DD'),
-          'end-date': window
-            .moment(now)
-            .date(1)
-            .month(0)
-            .subtract(1, 'day')
-            .format('YYYY-MM-DD')
-        })
-
-        Promise.all([thisYear, lastYear])
-          .then(function (results) {
-            let data1 = results[0].rows.map(function (row) {
-              return +row[2]
-            })
-            let data2 = results[1].rows.map(function (row) {
-              return +row[2]
-            })
-            let labels = [
-              'Jan',
-              'Feb',
-              'Mar',
-              'Apr',
-              'May',
-              'Jun',
-              'Jul',
-              'Aug',
-              'Sep',
-              'Oct',
-              'Nov',
-              'Dec'
+          .then(function (response) {
+            let data = []
+            let colors = [
+              '#4D5360',
+              '#949FB1',
+              '#D4CCC5',
+              '#E2EAE9',
+              '#F7464A',
+              '#2196F3'
             ]
 
-            // Ensure the data arrays are at least as long as the labels array.
-            // Chart.js bar charts don't (yet) accept sparse datasets.
-            for (let i = 0, len = labels.length; i < len; i++) {
-              if (data1[i] === undefined) data1[i] = null
-              if (data2[i] === undefined) data2[i] = null
-            }
+            response.rows.forEach(function (row, i) {
+              data.push({ value: +row[1], color: colors[i], label: row[0] })
+            })
 
-            let data = {
-              labels: labels,
-              datasets: [
-                {
-                  label: 'Last Year',
-                  fillColor: 'rgba(220,220,220,0.5)',
-                  strokeColor: 'rgba(220,220,220,1)',
-                  data: data2
-                },
-                {
-                  label: 'This Year',
-                  fillColor: 'rgba(151,187,205,0.5)',
-                  strokeColor: 'rgba(151,187,205,1)',
-                  data: data1
-                }
-              ]
-            }
-
-            new window.Chart(makeCanvas('chart-2-container')).Bar(data)
-            generateLegend('legend-2-container', data.datasets)
+            new window.Chart(makeCanvas('chart-4-container')).Doughnut(data)
+            generateLegend('legend-4-container', data)
           })
           .catch(function (err) {
             console.error(err.stack)
           })
+      }
+
+      /**
+       * Draw the a chart.js doughnut chart with data from the specified view that
+       * show the top 5 browsers over the past seven days.
+       */
+      function renderTopDeviceChart (ids) {
+        query({
+          ids: ids,
+          dimensions: 'ga:mobileDeviceModel',
+          metrics: 'ga:pageviews',
+          sort: '-ga:pageviews',
+          'max-results': 5
+        }).then(function (response) {
+          let data = []
+          let colors = ['#4D5360', '#949FB1', '#D4CCC5', '#E2EAE9', '#F7464A']
+
+          response.rows.forEach(function (row, i) {
+            data.push({ value: +row[1], color: colors[i], label: row[0] })
+          })
+
+          new window.Chart(makeCanvas('chart-5-container')).Doughnut(data)
+          generateLegend('legend-5-container', data)
+        })
       }
 
       /**
@@ -370,37 +484,8 @@ export default {
             data.push({ value: +row[1], color: colors[i], label: row[0] })
           })
 
-          new window.Chart(makeCanvas('chart-3-container')).Doughnut(data)
-          generateLegend('legend-3-container', data)
-        })
-      }
-
-      /**
-       * Draw the a chart.js doughnut chart with data from the specified view that
-       * compares sessions from mobile, desktop, and tablet over the past seven
-       * days.
-       */
-      function renderTopCountriesChart (ids) {
-        query({
-          ids: ids,
-          dimensions: 'ga:country',
-          metrics: 'ga:sessions',
-          sort: '-ga:sessions',
-          'max-results': 5
-        }).then(function (response) {
-          let data = []
-          let colors = ['#4D5360', '#949FB1', '#D4CCC5', '#E2EAE9', '#F7464A']
-
-          response.rows.forEach(function (row, i) {
-            data.push({
-              label: row[0],
-              value: +row[1],
-              color: colors[i]
-            })
-          })
-
-          new window.Chart(makeCanvas('chart-4-container')).Doughnut(data)
-          generateLegend('legend-4-container', data)
+          new window.Chart(makeCanvas('chart-6-container')).Doughnut(data)
+          generateLegend('legend-6-container', data)
         })
       }
 
