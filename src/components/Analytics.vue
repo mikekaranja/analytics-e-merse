@@ -79,7 +79,7 @@
         <v-flex xs6>
           <v-card style="margin: 15px;" light>
             <div class="Chartjs">
-              <h3>Top Traffic Sources (past week)</h3>
+              <h3>Top Traffic Sources (by channel)</h3>
               <figure class="Chartjs-figure" id="chart-4-container"></figure>
               <ol class="Chartjs-legend" id="legend-4-container"></ol>
             </div>
@@ -143,8 +143,7 @@ export default {
     conversionRate () {
       let div = parseInt(this.total) / parseInt(this.users)
       let con = div * 100
-      console.log(con)
-      return con
+      return con.toString().substring(0, 4)
     }
   },
   methods: {
