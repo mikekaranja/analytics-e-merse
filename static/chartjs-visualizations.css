@@ -28,6 +28,37 @@
   --sidebar-width: 260px;
   --sidebar-width-md: 280px;
   --quantum-timing: cubic-bezier(.4, 0, .2, 1);
+  --DateRangeSelector-itemMinWidth: 150px;
+}
+
+.DateRangeSelector {
+  display: -webkit-box;
+  flex-wrap: wrap;
+}
+
+.DateRangeSelector-item {
+  width: 46%;
+  margin: 10px;
+  flex: 1 0 calc(100% - 1em);
+}
+
+.DateRangeSelector-item > label {
+  font-weight: 700;
+  margin: 0 .25em .25em 0;
+  display: block;
+}
+
+.DateRangeSelector-item > input {
+  width: 100%;
+  border: 1px solid;
+  text-align: center;
+}
+
+@media (--break-md) {
+  .DateRangeSelector-item {
+    flex-basis: auto;
+    min-width: var(--DateRangeSelector-itemMinWidth);
+  }
 }
 
 .ActiveUsers {

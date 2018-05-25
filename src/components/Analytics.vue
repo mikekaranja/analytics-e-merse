@@ -52,9 +52,11 @@
         <v-flex xs6>
           <v-card style="margin: 15px;" light>
             <div class="Chartjs">
-              <h3>Users (past week)</h3>
-              <figure class="Chartjs-figure" id="chart-1-container"></figure>
-              <ol class="Chartjs-legend" id="legend-1-container"></ol>
+              <h3>Users</h3>
+              <!-- <figure class="Chartjs-figure" id="chart-1-container"></figure>
+              <ol class="Chartjs-legend" id="legend-1-container"></ol> -->
+              <div id="data-chart-1-container"></div>
+              <div id="date-range-selector-1-container"></div>
             </div>
           </v-card>
         </v-flex>
@@ -62,8 +64,10 @@
           <v-card style="margin: 15px;" light>
             <div class="Chartjs">
               <h3>Bounce Rate (by session)</h3>
-              <figure class="Chartjs-figure" id="chart-2-container"></figure>
-              <ol class="Chartjs-legend" id="legend-2-container"></ol>
+              <!-- <figure class="Chartjs-figure" id="chart-2-container"></figure>
+              <ol class="Chartjs-legend" id="legend-2-container"></ol> -->
+              <div id="data-chart-2-container"></div>
+              <div id="date-range-selector-2-container"></div>
             </div>
           </v-card>
         </v-flex>
@@ -71,8 +75,10 @@
           <v-card style="margin: 15px;" light>
             <div class="Chartjs">
               <h3>Average Duration (by session)</h3>
-              <figure class="Chartjs-figure" id="chart-3-container"></figure>
-              <ol class="Chartjs-legend" id="legend-3-container"></ol>
+              <!-- <figure class="Chartjs-figure" id="chart-3-container"></figure>
+              <ol class="Chartjs-legend" id="legend-3-container"></ol> -->
+              <div id="data-chart-3-container"></div>
+              <div id="date-range-selector-3-container"></div>
             </div>
           </v-card>
         </v-flex>
@@ -88,7 +94,7 @@
         <v-flex xs6>
           <v-card style="margin: 15px;" light>
             <div class="Chartjs">
-              <h3>Top Mobile Devices (by session)</h3>
+              <h3>Top Mobile Devices (by pageview)</h3>
               <figure class="Chartjs-figure" id="chart-5-container"></figure>
               <ol class="Chartjs-legend" id="legend-5-container"></ol>
             </div>
@@ -120,6 +126,9 @@ const config = {
 
 const CLIENT_ID =
   '662994060989-alo8n62l7629hc6n6d095uvq8c69e1h8.apps.googleusercontent.com'
+
+// let dataids = ''
+// let dateRange1 = ''
 
 export default {
   data () {
@@ -276,6 +285,10 @@ export default {
         // Start tracking active users for this view.
         activeUsers.set(data).execute()
 
+        dataChart1.set({ query: { ids: data.ids } }).execute()
+        dataChart2.set({ query: { ids: data.ids } }).execute()
+        dataChart3.set({ query: { ids: data.ids } }).execute()
+
         // Render all the of charts for this view.
         renderUsersChart(data.ids)
         renderTopBounceRateChart(data.ids)
@@ -285,14 +298,176 @@ export default {
         renderTopBrowsersChart(data.ids)
       })
 
+      /**
+       * Query params representing the first chart's date range.
+       */
+      let dateRange1 = {
+        'start-date': '7daysAgo',
+        'end-date': 'today'
+      }
+
+      /**
+       * Query params representing the second chart's date range.
+       */
+      var dateRange2 = {
+        'start-date': '7daysAgo',
+        'end-date': 'yesterday'
+      }
+
+      /**
+       * Query params representing the second chart's date range.
+       */
+      var dateRange3 = {
+        'start-date': '7daysAgo',
+        'end-date': 'yesterday'
+      }
+
+      let dateRangeSelector1 = new window.gapi.analytics.ext.DateRangeSelector({
+        container: 'date-range-selector-1-container'
+      })
+        .set(dateRange1)
+        .execute()
+
+      /**
+       * Create a new DateRangeSelector instance to be rendered inside of an
+       * element with the id "date-range-selector-2-container", set its date range
+       * and then render it to the page.
+       */
+      let dateRangeSelector2 = new window.gapi.analytics.ext.DateRangeSelector({
+        container: 'date-range-selector-2-container'
+      })
+        .set(dateRange2)
+        .execute()
+
+      /**
+       * Create a new DateRangeSelector instance to be rendered inside of an
+       * element with the id "date-range-selector-2-container", set its date range
+       * and then render it to the page.
+       */
+      let dateRangeSelector3 = new window.gapi.analytics.ext.DateRangeSelector({
+        container: 'date-range-selector-3-container'
+      })
+        .set(dateRange3)
+        .execute()
+      /**
+       * Register a handler to run whenever the user changes the date range from
+       * the first datepicker. The handler will update the first dataChart
+       * instance as well as change the dashboard subtitle to reflect the range.
+       */
+      dateRangeSelector1.on('change', function (data) {
+        dataChart1.set({ query: data }).execute()
+
+        // Update the "from" dates text.
+        let datefield = document.getElementById('from-dates')
+        datefield.textContent =
+          data['start-date'] + '&mdash;' + data['end-date']
+      })
+
+      /**
+       * Register a handler to run whenever the user changes the date range from
+       * the second datepicker. The handler will update the second dataChart
+       * instance as well as change the dashboard subtitle to reflect the range.
+       */
+      dateRangeSelector2.on('change', function (data) {
+        dataChart2.set({ query: data }).execute()
+
+        // Update the "to" dates text.
+        let datefield = document.getElementById('to-dates')
+        datefield.textContent =
+          data['start-date'] + '&mdash;' + data['end-date']
+      })
+      /**
+       * Register a handler to run whenever the user changes the date range from
+       * the second datepicker. The handler will update the second dataChart
+       * instance as well as change the dashboard subtitle to reflect the range.
+       */
+      dateRangeSelector3.on('change', function (data) {
+        dataChart3.set({ query: data }).execute()
+
+        // Update the "to" dates text.
+        let datefield = document.getElementById('to-dates')
+        datefield.textContent =
+          data['start-date'] + '&mdash;' + data['end-date']
+      })
+
+      /**
+       * Store a set of common DataChart config options since they're shared by
+       * both of the charts we're about to make.
+       */
+      let commonConfig = {
+        query: {
+          metrics: 'ga:users',
+          dimensions: 'ga:date'
+        },
+        chart: {
+          type: 'LINE',
+          options: {
+            width: '100%'
+          }
+        }
+      }
+      let commonConfig2 = {
+        query: {
+          metrics: 'ga:bounceRate',
+          dimensions: 'ga:date'
+        },
+        chart: {
+          type: 'LINE',
+          options: {
+            width: '100%'
+          }
+        }
+      }
+      let commonConfig3 = {
+        query: {
+          metrics: 'ga:avgSessionDuration',
+          dimensions: 'ga:date'
+        },
+        chart: {
+          type: 'LINE',
+          options: {
+            width: '100%'
+          }
+        }
+      }
+      /**
+       * Create a new DataChart instance with the given query parameters
+       * and Google chart options. It will be rendered inside an element
+       * with the id "data-chart-1-container".
+       */
+      let dataChart1 = new window.gapi.analytics.googleCharts.DataChart(
+        commonConfig
+      )
+        .set({ query: dateRange1 })
+        .set({ chart: { container: 'data-chart-1-container' } })
+
+      /**
+       * Create a new DataChart instance with the given query parameters
+       * and Google chart options. It will be rendered inside an element
+       * with the id "data-chart-2-container".
+       */
+      let dataChart2 = new window.gapi.analytics.googleCharts.DataChart(commonConfig2)
+        .set({ query: dateRange2 })
+        .set({ chart: { container: 'data-chart-2-container' } })
+
+      /**
+       * Create a new DataChart instance with the given query parameters
+       * and Google chart options. It will be rendered inside an element
+       * with the id "data-chart-2-container".
+       */
+      let dataChart3 = new window.gapi.analytics.googleCharts.DataChart(commonConfig3)
+        .set({ query: dateRange3 })
+        .set({ chart: { container: 'data-chart-3-container' } })
+
       // users last 7 days
       function renderUsersChart (ids) {
         query({
           ids: ids,
           dimensions: 'ga:date',
           metrics: 'ga:7dayUsers',
-          'start-date': '7daysAgo',
-          'end-date': 'today'
+          dateRange1
+          // 'start-date': '7daysAgo',
+          // 'end-date': 'today'
         }).then(function (response) {
           let data1 = response.rows.map(function (row) {
             return +row[1]
