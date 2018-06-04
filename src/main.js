@@ -15,6 +15,9 @@ import {
   VToolbar,
   VCard,
   Vselect,
+  VDatePicker,
+  VTextField,
+  VMenu,
   transitions
 } from 'vuetify'
 import '../node_modules/vuetify/src/stylus/app.styl'
@@ -31,6 +34,9 @@ Vue.use(Vuetify, {
     VToolbar,
     VCard,
     Vselect,
+    VDatePicker,
+    VTextField,
+    VMenu,
     transitions
   },
   theme: {
