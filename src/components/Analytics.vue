@@ -162,9 +162,10 @@ export default {
       }
     },
     dateOf (myDate) {
+      console.log(myDate)
       myDate = myDate.split('-')
       var newDate = myDate[0] + '/' + myDate[1] + '/' + myDate[2]
-      return new Date(newDate).getTime()
+      return new Date(newDate)
     },
     dateOf1 (time) {
       let today = new Date(time)
@@ -216,14 +217,18 @@ export default {
         window.firebase
           .database()
           .ref(`vendorsleads/${this.e1.db}`)
-          .orderByChild('startedAt')
-          .startAt(this.dateOf(this.startdate))
-          .endAt(this.dateOf(this.enddate))
           .once('value')
           .then(snapshot => {
-            console.log('got the data!', snapshot.val())
-            const data = Object.values(snapshot.val())
-            this.total = data.length
+            this.leads = snapshot.val()
+          })
+          .then(() => {
+            const leads = Object.values(this.leads).filter(item => {
+              let date = new Date(item.startedAt)
+              let start = new Date(this.startdate)
+              let end = new Date(this.enddate)
+              return date >= start && date <= end
+            })
+            this.total = leads.length
           })
       }
     },
