@@ -130,7 +130,10 @@ export default {
       averageduration: '',
       items: [
         { text: 'Backyardshoez', db: 'backyardshoez', id: '157142203' },
+        { text: 'Theyardstores', db: 'theyardstores', id: '177755007' },
         { text: 'Backyardmens', db: 'backyardmens', id: '174121249' },
+        { text: 'Kraft Kenya', db: 'kraftkenya', id: '178834834' },
+        { text: 'Winaonline', db: 'winaonline', id: '178077031' },
         { text: 'Citywalk', db: 'citywalk', id: '156430690' },
         { text: 'Salute Holdings', db: 'salute', id: '166305779' }
       ]
