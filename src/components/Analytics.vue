@@ -13,13 +13,13 @@
             <v-select @input="getShopData" light color="black" :items="items" v-model="e1" label="Shop" single-line></v-select>
           </div>
           <div style="margin-left: 3%; width: 250px;">
-            <v-menu ref="menu2" :close-on-content-click="false" v-model="menu2" :nudge-right="40" :return-value.sync="date" lazy transition="scale-transition" offset-y full-width min-width="290px">
+            <v-menu ref="menu2" :close-on-content-click="true" v-model="menu2" :nudge-right="40" :return-value.sync="date" lazy transition="scale-transition" offset-y full-width min-width="290px">
               <v-text-field slot="activator" v-model="startdate" label="Select Start Date" prepend-icon="event" readonly></v-text-field>
               <v-date-picker @input="dateChange" :max="maxDate" v-model="startdate"></v-date-picker>
             </v-menu>
           </div>
           <div style="margin-left: 3%; width: 250px;">
-            <v-menu ref="menu3" :close-on-content-click="false" v-model="menu3" :nudge-right="40" :return-value.sync="date2" lazy transition="scale-transition" offset-y full-width min-width="290px">
+            <v-menu ref="menu3" :close-on-content-click="true" v-model="menu3" :nudge-right="40" :return-value.sync="date2" lazy transition="scale-transition" offset-y full-width min-width="290px">
               <v-text-field slot="activator" v-model="enddate" label="Select End Date" prepend-icon="event" readonly></v-text-field>
               <v-date-picker @input="dateChange" :max="maxDate" v-model="enddate"></v-date-picker>
             </v-menu>
@@ -113,8 +113,8 @@ export default {
     return {
       date: null,
       date2: null,
-      startdate: '',
-      enddate: '',
+      startdate: null,
+      enddate: null,
       menu: false,
       modal: false,
       menu2: false,
@@ -130,12 +130,14 @@ export default {
       averageduration: '',
       items: [
         { text: 'Backyardshoez', db: 'backyardshoez', id: '157142203' },
-        { text: 'Theyardstores', db: 'theyardstores', id: '177755007' },
-        { text: 'Backyardmens', db: 'backyardmens', id: '174121249' },
-        { text: 'Kraft Kenya', db: 'kraftkenya', id: '178834834' },
-        { text: 'Winaonline', db: 'winaonline', id: '178077031' },
         { text: 'Citywalk', db: 'citywalk', id: '156430690' },
-        { text: 'Salute Holdings', db: 'salute', id: '166305779' }
+        { text: 'Theyardstores', db: 'theyardstores', id: '177755007' },
+        { text: 'Winaonline', db: 'winaonline', id: '178077031' },
+        { text: 'Uk kiosk', db: 'ukkiosk', id: '182897794' },
+        { text: 'Bata Kenya', db: 'batakenya', id: '182910214' },
+        { text: 'Leano Butcheries', db: 'leanobutcheries', id: '182892654' },
+        { text: 'Salute Holdings', db: 'salute', id: '166305779' },
+        { text: 'Backyardmens', db: 'backyardmens', id: '174121249' }
       ]
     }
   },
@@ -144,10 +146,11 @@ export default {
       let today = new Date()
       let year = today.getFullYear()
       let month =
-        (today.getMonth() < 10 ? '0' : '') +
+        (parseInt(today.getMonth().toString()) + 1 < 10 ? '0' : '') +
         (parseInt(today.getMonth().toString()) + 1)
       let day = (today.getDate() < 10 ? '0' : '') + today.getDate()
       let date = year + '-' + month + '-' + day
+      console.log(date)
       this.startdate = date
       this.enddate = date
       return date
