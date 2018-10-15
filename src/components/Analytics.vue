@@ -135,6 +135,7 @@ export default {
         { text: 'Winaonline', db: 'winaonline', id: '178077031' },
         { text: 'Uk kiosk', db: 'ukkiosk', id: '182897794' },
         { text: 'Bata Kenya', db: 'batakenya', id: '182910214' },
+        { text: 'Luxury254', db: 'luxury254', id: '183353808' },
         { text: 'Leano Butcheries', db: 'leanobutcheries', id: '182892654' },
         { text: 'Salute Holdings', db: 'salute', id: '166305779' },
         { text: 'Backyardmens', db: 'backyardmens', id: '174121249' }
