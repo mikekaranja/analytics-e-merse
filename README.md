@@ -1,6 +1,6 @@
-# admin
+# Admin backend for shop analytics
 
-> A Vue.js project
+> Built by Vue.js 
 
 ## Build Setup
 
